@@ -47,6 +47,70 @@ namespace Practice1.Controllers
             return View(user);
         }
 
+        [HttpPost, ActionName("UpdateUser")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateUser(Guid? Id)
+        {
+            if (Id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _dbContext.Users.FirstOrDefaultAsync(s => s.Id == Id);
+
+
+            if (await TryUpdateModelAsync<User>(
+                user, "", u => u.Login, u => u.Password))
+            {
+                try
+                {
+                    await _dbContext.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. " + "Try again or call system admin");
+                }
+            }
+
+            return View(user);
+        }
+
+
+        public async Task<IActionResult> UpdateUser(Guid Id)
+        {
+            if (Id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _dbContext.Users.FirstOrDefaultAsync(m => m.Id == Id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        public async Task<IActionResult> DetailsOfUser(Guid id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _dbContext.Users.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
         public IActionResult Login()
         {
 
