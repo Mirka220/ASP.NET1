@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Practice1.Models;
 using System.Diagnostics;
 
@@ -8,14 +9,42 @@ namespace Practice1.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly AppDBContext _dbContext;
+
+        public HomeController(ILogger<HomeController> logger, AppDBContext dbContext)
         {
             _logger = logger;
+            _dbContext = dbContext;
         }
 
         public IActionResult Index()
         {
             return View();
+        }
+
+        public async Task<IActionResult> CreateUser()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateUser([Bind("Login,Password")] User user)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _dbContext.Add(user);
+                    await _dbContext.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+            }
+
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to save changes. " + "Try again or call system admin");
+            }
+
+            return View(user);
         }
 
         public IActionResult Login()

@@ -1,26 +1,25 @@
-﻿@{
+﻿@model Practice1.Models.User
+
+@{
     ViewData["Title"] = "Registr";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <form method="post" class="decor">
+    <form method="post" asp-action="Registr" class="decor">
         <div class="form-left-decoration"></div>
         <div class="form-right-decoration"></div>
         <div class="circle"></div>
         <div class="form-inner">
+            <div asp-validation-summary="ModelOnly"></div>
             <div>
-                <label></label><br />
-                <input placeholder="Login"/>
-                <span ></span>
+                <label asp-for="Login"></label><br />
+                <input type="text" asp-for="Login" />
+                <span asp-validation-for="Login"></span>
             </div>
             <div>
-                <label ></label><br />
-                <input placeholder="password"/>
-                <span></span>
-            </div>
-            <div>
-                <label ></label><br />
-                <input placeholder="confirm password"/>
-                <span></span>
+                <label asp-for="Password"></label><br />
+                <input type="password" asp-for="Password" />
+                <span asp-validation-for="Password"></span>
             </div>
             <div>
                 <input type="submit" value="Register" />
