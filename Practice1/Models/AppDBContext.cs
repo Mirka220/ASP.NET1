@@ -7,7 +7,7 @@ namespace Practice1.Models
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         {
 
-              Database.EnsureCreated();     // creating new db when first call
+              //Database.EnsureCreated();     // creating new db when first call
 
         }
 

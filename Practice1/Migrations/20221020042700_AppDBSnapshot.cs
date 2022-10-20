@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Practice1.Migrations
 {
     /// <inheritdoc />
-    public partial class AppDBContextModelSnapshot : Migration
+    public partial class AppDBSnapshot : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

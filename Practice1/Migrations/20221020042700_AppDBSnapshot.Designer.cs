@@ -12,8 +12,8 @@ using Practice1.Models;
 namespace Practice1.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20221015025922_AppDBContextModelSnapshot")]
-    partial class AppDBContextModelSnapshot
+    [Migration("20221020042700_AppDBSnapshot")]
+    partial class AppDBSnapshot
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

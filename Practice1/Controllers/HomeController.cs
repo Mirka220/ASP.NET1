@@ -19,7 +19,9 @@ namespace Practice1.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            List<User> users = (from m in _dbContext.Users select m).ToList();
+
+            return View(users);
         }
 
         public async Task<IActionResult> CreateUser()
@@ -111,6 +113,50 @@ namespace Practice1.Controllers
             return View(user);
         }
 
+        public async Task<IActionResult> DeleteUser(Guid id, bool? Savechangeserror = false)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (Savechangeserror.GetValueOrDefault())
+            {
+                ViewData["DeleteError"] = "Delete failed, please try again later ... ";
+            }
+
+            return View(user);
+        }
+
+        [HttpPost, ActionName("DeleteUser")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmDeleteUser(Guid id)
+        {
+            var user = await _dbContext.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            try
+            {
+                _dbContext.Users.Remove(user);
+                await _dbContext.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                return RedirectToAction(nameof(DeleteUser), new { id = id, Savechangeserror = true });
+            }
+        }
+
         public IActionResult Login()
         {
 
@@ -158,6 +204,11 @@ namespace Practice1.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public async Task<IActionResult> FullInfo()
+        {
+            return PartialView("FullInfo");
         }
     }
 }
